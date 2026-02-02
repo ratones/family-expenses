@@ -1,6 +1,6 @@
 {
   "name": "family-expenses",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -81,7 +81,10 @@
     },
     "mac": {
       "category": "public.app-category.finance",
-      "target": "dmg",
+      "target": [
+        "dmg",
+        "zip"
+      ],
       "icon": "build/icon.icns"
     },
     "win": {
