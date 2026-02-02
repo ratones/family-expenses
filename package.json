@@ -1,6 +1,6 @@
 {
   "name": "family-expenses",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -82,10 +82,21 @@
     "mac": {
       "category": "public.app-category.finance",
       "target": [
-        "dmg",
-        "zip"
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64"
+          ]
+        }
       ],
-      "icon": "build/icon.icns"
+      "icon": "build/icon.icns",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "win": {
       "target": "nsis",
