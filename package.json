@@ -1,6 +1,6 @@
 {
   "name": "family-expenses",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -13,7 +13,9 @@
     "dist": "npm run build-electron && electron-builder",
     "dist:win": "npm run build-electron && electron-builder --win",
     "dist:mac": "npm run build-electron && electron-builder --mac",
-    "dist:linux": "npm run build-electron && electron-builder --linux"
+    "dist:linux": "npm run build-electron && electron-builder --linux",
+    "publish": "npm run build-electron && electron-builder --publish=always",
+    "publish:mac": "npm run build-electron && electron-builder --mac --publish=always"
   },
   "prettier": {
     "printWidth": 100,
@@ -38,6 +40,7 @@
     "@angular/platform-browser": "^21.1.0",
     "@angular/router": "^21.1.0",
     "devextreme-angular": "^24.2.6",
+    "electron-updater": "^6.7.3",
     "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
     "nedb": "^1.8.0",
@@ -70,6 +73,11 @@
       "preload.js",
       "package.json"
     ],
+    "publish": {
+      "provider": "github",
+      "owner": "ratones",
+      "repo": "family-expenses"
+    },
     "mac": {
       "category": "public.app-category.finance",
       "target": "dmg"

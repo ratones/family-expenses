@@ -2,9 +2,45 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const DatabaseService = require('./database-main');
+const { autoUpdater } = require('electron-updater');
 
 let mainWindow;
 let databaseService;
+
+// Auto-updater configuration
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
+
+// Auto-updater event handlers
+autoUpdater.on('checking-for-update', () => {
+  console.log('Checking for update...');
+});
+
+autoUpdater.on('update-available', (info) => {
+  console.log('Update available:', info.version);
+  // You could show a notification to the user here
+});
+
+autoUpdater.on('update-not-available', (info) => {
+  console.log('Update not available:', info.version);
+});
+
+autoUpdater.on('error', (err) => {
+  console.error('Error in auto-updater:', err);
+});
+
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  console.log(log_message);
+});
+
+autoUpdater.on('update-downloaded', (info) => {
+  console.log('Update downloaded:', info.version);
+  // Auto-install on quit is enabled, but you could show a dialog here
+  autoUpdater.quitAndInstall();
+});
 
 function createWindow() {
   // Create the browser window
@@ -56,7 +92,14 @@ function createWindow() {
 }
 
 // This method will be called when Electron has finished initialization
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+  
+  // Check for updates (only in production)
+  if (process.env.NODE_ENV !== 'development') {
+    autoUpdater.checkForUpdatesAndNotify();
+  }
+});
 
 // Quit when all windows are closed, except on macOS
 app.on('window-all-closed', () => {
