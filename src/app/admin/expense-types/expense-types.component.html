@@ -1,0 +1,84 @@
+    <div class="expense-types-container">
+      <h2>Expense Types</h2>
+
+      <dx-button
+        text="Add Expense Type"
+        type="default"
+        icon="plus"
+        (onClick)="showAddPopup()"
+        style="margin-bottom: 1rem;">
+      </dx-button>
+
+      <dx-data-grid
+        #dataGrid
+        [dataSource]="expenseTypes()"
+        [columns]="columns"
+        [showBorders]="true"
+        [allowColumnReordering]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showColumnLines]="true"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [hoverStateEnabled]="true"
+        [selection]="{ mode: 'single' }"
+        (onRowClick)="onRowClick($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)">
+      </dx-data-grid>
+
+      <dx-popup
+        [visible]="popupVisible()"
+        [title]="isEditing() ? 'Edit Expense Type' : 'Add Expense Type'"
+        [width]="500"
+        [height]="400"
+        (onHiding)="hidePopup()">
+        <dx-form
+          [formData]="currentExpenseType()"
+          [colCount]="1"
+          [showColonAfterLabel]="true">
+          <dxi-item
+            dataField="id"
+            [label]="{ text: 'ID' }"
+            [editorOptions]="{ placeholder: 'e.g., food, utilities' }">
+          </dxi-item>
+          <dxi-item
+            dataField="name"
+            [label]="{ text: 'Name' }"
+            [editorOptions]="{ placeholder: 'e.g., Food, Utilities' }">
+          </dxi-item>
+          <dxi-item
+            dataField="icon"
+            [label]="{ text: 'Icon (optional)' }"
+            [editorOptions]="{ placeholder: 'e.g., fa-utensils' }">
+          </dxi-item>
+          <dxi-item
+            dataField="color"
+            [label]="{ text: 'Color (optional)' }"
+            [editorOptions]="{ placeholder: 'e.g., #ff0000' }">
+          </dxi-item>
+          <dxi-item
+            dataField="isActive"
+            [label]="{ text: 'Active' }"
+            editorType="dxCheckBox">
+          </dxi-item>
+        </dx-form>
+
+        <dxi-popup-toolbar-item
+          widget="dxButton"
+          location="after"
+          [options]="{
+            text: 'Save',
+            type: 'default',
+            onClick: saveExpenseType
+          }">
+        </dxi-popup-toolbar-item>
+        <dxi-popup-toolbar-item
+          widget="dxButton"
+          location="after"
+          [options]="{
+            text: 'Cancel',
+            onClick: hidePopup
+          }">
+        </dxi-popup-toolbar-item>
+      </dx-popup>
+    </div>

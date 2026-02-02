@@ -1,0 +1,66 @@
+.admin-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-toolbar {
+  border-bottom: 1px solid #ddd;
+
+  .admin-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+}
+
+.admin-content {
+  flex: 1;
+  padding: 1rem;
+  overflow: auto;
+}
+
+// Responsive design for admin component
+@media (max-width: 768px) {
+  .admin-toolbar {
+    .admin-title {
+      font-size: 1.2rem;
+    }
+
+    dx-button {
+      ::ng-deep .dx-button-content {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .admin-content {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-toolbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 8px;
+
+    .admin-title {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      width: 100%;
+    }
+
+    dx-button {
+      margin: 2px;
+      ::ng-deep .dx-button-content {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .admin-content {
+    padding: 0.25rem;
+  }
+}

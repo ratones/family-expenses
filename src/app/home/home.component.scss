@@ -1,0 +1,80 @@
+.home-container {
+  padding: 20px;
+}
+
+.expenses-section {
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+}
+
+// Responsive design for home component
+@media (max-width: 768px) {
+  .home-container {
+    padding: 10px;
+  }
+
+  .expenses-section {
+    h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+  }
+
+  // DevExtreme data grid responsive adjustments
+  ::ng-deep .dx-datagrid {
+    font-size: 14px;
+
+    .dx-datagrid-headers {
+      .dx-datagrid-header-panel {
+        padding: 8px;
+      }
+    }
+
+    .dx-row {
+      padding: 8px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 5px;
+  }
+
+  .expenses-section {
+    h2 {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+  }
+
+  // Further mobile optimizations for data grid
+  ::ng-deep .dx-datagrid {
+    font-size: 12px;
+
+    .dx-datagrid-headers {
+      display: none; // Hide headers on very small screens
+    }
+
+    .dx-row {
+      padding: 6px;
+      display: block; // Stack cells vertically
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 10px;
+
+      > td {
+        display: block;
+        padding: 4px 0;
+        border: none;
+
+        &::before {
+          content: attr(data-caption) ': ';
+          font-weight: bold;
+          color: #666;
+        }
+      }
+    }
+  }
+}

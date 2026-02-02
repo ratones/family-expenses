@@ -1,0 +1,58 @@
+.users-container {
+  padding: 1rem;
+}
+
+h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .users-container {
+    padding: 0.5rem;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin-bottom: 0.5rem;
+  }
+
+  dx-button {
+    ::ng-deep .dx-button-content {
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .users-container {
+    padding: 0.25rem;
+  }
+
+  h2 {
+    font-size: 16px;
+    margin-bottom: 0.25rem;
+  }
+
+  dx-button {
+    width: 100%;
+    margin-bottom: 10px;
+    ::ng-deep .dx-button-content {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
+
+  // DevExtreme popup responsive
+  ::ng-deep .dx-popup-content {
+    padding: 10px;
+  }
+
+  ::ng-deep .dx-form {
+    .dx-field-item-label {
+      width: 100px;
+    }
+  }
+}

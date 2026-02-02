@@ -1,0 +1,9 @@
+{"id":"shopping","name":"Shopping","isActive":true,"_id":"2mzIaELUGGtU6YhZ"}
+{"id":"household","name":"Household","isActive":true,"_id":"67rFhmHfZ0SduUlI"}
+{"id":"food","name":"Food","isActive":true,"_id":"AZ1ux0AaOIalIcNi"}
+{"id":"entertainment","name":"Entertainment","isActive":true,"_id":"KNYxGTVyCVVcd5Xc"}
+{"id":"utilities","name":"Utilities","isActive":true,"_id":"QfaF5PrHaLZdjsOl"}
+{"id":"other","name":"Other","isActive":true,"_id":"TPTF6NuimsakoLL3"}
+{"id":"transport","name":"Transport","isActive":true,"_id":"UUuUbdl44G0nkRLQ"}
+{"id":"education","name":"Education","isActive":true,"_id":"mKDwuZP0KLMMYR00","icon":"fa-utensils","color":"#ff000000"}
+{"id":"health","name":"Health","isActive":true,"_id":"soufcWkjCrs3NivX"}

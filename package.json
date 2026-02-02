@@ -1,0 +1,84 @@
+{
+  "name": "family-expenses",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "electron": "electron .",
+    "electron-dev": "./electron-dev.sh",
+    "build-electron": "ng build --configuration production",
+    "dist": "npm run build-electron && electron-builder",
+    "dist:win": "npm run build-electron && electron-builder --win",
+    "dist:mac": "npm run build-electron && electron-builder --mac",
+    "dist:linux": "npm run build-electron && electron-builder --linux"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "main": "main.js",
+  "homepage": "./",
+  "packageManager": "npm@11.6.2",
+  "dependencies": {
+    "@angular/common": "^21.1.0",
+    "@angular/compiler": "^21.1.0",
+    "@angular/core": "^21.1.0",
+    "@angular/forms": "^21.1.0",
+    "@angular/platform-browser": "^21.1.0",
+    "@angular/router": "^21.1.0",
+    "devextreme-angular": "^24.2.6",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
+    "nedb": "^1.8.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.1.2",
+    "@angular/cli": "^21.1.2",
+    "@angular/compiler-cli": "^21.1.0",
+    "@types/nedb": "^1.8.16",
+    "concurrently": "^8.2.2",
+    "devextreme": "^24.2.6",
+    "electron": "^40.1.0",
+    "electron-builder": "^24.13.3",
+    "jsdom": "^27.1.0",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8",
+    "wait-on": "^9.0.3"
+  },
+  "build": {
+    "appId": "com.familyexpenses.app",
+    "productName": "Family Expenses",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/family-expenses/browser/**/*",
+      "main.js",
+      "preload.js",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.finance",
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

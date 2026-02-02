@@ -1,0 +1,61 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.app-toolbar {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .app-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333333;
+    margin: 0;
+  }
+}
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .app-toolbar {
+    .app-title {
+      font-size: 18px;
+    }
+
+    dx-button {
+      // Make button smaller on mobile
+      ::ng-deep .dx-button-content {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .app-content {
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-toolbar {
+    .app-title {
+      font-size: 16px;
+    }
+
+    dx-button {
+      // Icon only on very small screens
+      text: '';
+      ::ng-deep .dx-button-content {
+        padding: 8px;
+      }
+    }
+  }
+}

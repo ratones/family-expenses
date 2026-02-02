@@ -1,0 +1,23 @@
+    <div class="admin-container">
+      <dx-toolbar class="admin-toolbar">
+        <dxi-item location="before">
+          <div class="admin-title">Admin Panel</div>
+        </dxi-item>
+        <dxi-item location="after">
+          <dx-button text="Expense Types" type="normal" icon="folder" routerLink="expense-types"></dx-button>
+        </dxi-item>
+        <dxi-item location="after">
+          <dx-button text="Payment Types" type="normal" icon="money" routerLink="payment-types"></dx-button>
+        </dxi-item>
+        <dxi-item location="after">
+          <dx-button text="Users" type="normal" icon="user" routerLink="users"></dx-button>
+        </dxi-item>
+        <dxi-item location="after">
+          <dx-button text="Back to Main" type="default" icon="back" routerLink="/"></dx-button>
+        </dxi-item>
+      </dx-toolbar>
+
+      <div class="admin-content">
+        <router-outlet></router-outlet>
+      </div>
+    </div>

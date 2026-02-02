@@ -1,0 +1,78 @@
+    <div class="payment-types-container">
+      <h2>Payment Types</h2>
+
+      <dx-button
+        text="Add Payment Type"
+        type="default"
+        icon="plus"
+        (onClick)="showAddPopup()"
+        style="margin-bottom: 1rem;">
+      </dx-button>
+
+      <dx-data-grid
+        #dataGrid
+        [dataSource]="paymentTypes()"
+        [columns]="columns"
+        [showBorders]="true"
+        [allowColumnReordering]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showColumnLines]="true"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [hoverStateEnabled]="true"
+        [selection]="{ mode: 'single' }"
+        (onToolbarPreparing)="onToolbarPreparing($event)">
+      </dx-data-grid>
+
+      <dx-popup
+        [visible]="popupVisible()"
+        [title]="isEditing() ? 'Edit Payment Type' : 'Add Payment Type'"
+        [width]="500"
+        [height]="400"
+        (onHiding)="hidePopup()">
+        <dx-form
+          [formData]="currentPaymentType()"
+          [colCount]="1"
+          [showColonAfterLabel]="true">
+          <dxi-item
+            dataField="id"
+            [label]="{ text: 'ID' }"
+            [editorOptions]="{ placeholder: 'e.g., card, cash' }">
+          </dxi-item>
+          <dxi-item
+            dataField="name"
+            [label]="{ text: 'Name' }"
+            [editorOptions]="{ placeholder: 'e.g., Credit Card, Cash' }">
+          </dxi-item>
+          <dxi-item
+            dataField="icon"
+            [label]="{ text: 'Icon (optional)' }"
+            [editorOptions]="{ placeholder: 'e.g., fa-credit-card' }">
+          </dxi-item>
+          <dxi-item
+            dataField="isActive"
+            [label]="{ text: 'Active' }"
+            editorType="dxCheckBox">
+          </dxi-item>
+        </dx-form>
+
+        <dxi-popup-toolbar-item
+          widget="dxButton"
+          location="after"
+          [options]="{
+            text: 'Save',
+            type: 'default',
+            onClick: savePaymentType
+          }">
+        </dxi-popup-toolbar-item>
+        <dxi-popup-toolbar-item
+          widget="dxButton"
+          location="after"
+          [options]="{
+            text: 'Cancel',
+            onClick: hidePopup
+          }">
+        </dxi-popup-toolbar-item>
+      </dx-popup>
+    </div>

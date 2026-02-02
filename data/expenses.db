@@ -1,0 +1,6 @@
+{"date":{"$$date":1769923140983},"type":"transport","description":"Uber","amount":45,"paymentType":"card","whoPaid":"user2","vendor":"Uber","recurring":false,"notes":"","_id":"1j479apmyBLZIoiI"}
+{"date":{"$$date":1769836702088},"type":"health","description":"Radiografie Andreia","amount":150,"paymentType":"cash","whoPaid":"user2","vendor":"","recurring":false,"notes":"","_id":"CcfGj9lFxa2I1K2j"}
+{"date":{"$$date":1769923172798},"type":"food","description":"Freshful","amount":960,"paymentType":"card","whoPaid":"user2","vendor":"Freshful","recurring":false,"notes":"","_id":"H09rCJDmAT1JDaUQ"}
+{"date":{"$$date":1769923213694},"type":"food","description":"Mega Image","amount":191,"paymentType":"card","whoPaid":"user1","vendor":"Mega Image","recurring":false,"notes":"","_id":"tpVN6vUIWTCAPkbx"}
+{"date":{"$$date":1769744604280},"type":"entertainment","description":"Petrecere ziua Anei","amount":3000,"paymentType":"card","whoPaid":"user2","vendor":"Trapped","recurring":false,"notes":"","_id":"ukxvNx40BFkNdhkN"}
+{"date":{"$$date":1769750264280},"type":"entertainment","description":"Tort Ana","amount":350,"paymentType":"card","whoPaid":"user1","vendor":"Vanilla","recurring":false,"notes":"","_id":"vKvupMnT1zdgFsyi"}

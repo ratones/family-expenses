@@ -1,0 +1,206 @@
+<div class="home-container">
+  <div class="expenses-section">
+    <h2>Recent Expenses</h2>
+
+    <dx-button
+      text="Add Expense"
+      type="default"
+      icon="plus"
+      (onClick)="showAddPopup()"
+      style="margin-bottom: 1rem;">
+    </dx-button>
+
+    <dx-data-grid
+      #dataGrid
+      [dataSource]="expenses()"
+      [showBorders]="true"
+      [allowColumnReordering]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showColumnLines]="true"
+      [showRowLines]="true"
+      [rowAlternationEnabled]="true"
+      [hoverStateEnabled]="true"
+      [selection]="{ mode: 'single' }">
+      <dxi-column
+        dataField="date"
+        dataType="date"
+        caption="Date"
+        format="shortDate"
+        [allowGrouping]="true">
+      </dxi-column>
+      <dxi-column
+        dataField="type"
+        caption="Type"
+        [allowGrouping]="true">
+        <dxo-lookup
+          [dataSource]="expenseTypes"
+          valueExpr="value"
+          displayExpr="text">
+        </dxo-lookup>
+      </dxi-column>
+      <dxi-column
+        dataField="description"
+        caption="Description"
+        [allowGrouping]="false">
+      </dxi-column>
+      <dxi-column
+        dataField="amount"
+        dataType="number"
+        caption="Amount"
+        [format]="{ type: 'currency', currency: 'RON' }"
+        [allowGrouping]="false">
+      </dxi-column>
+      <dxi-column
+        dataField="paymentType"
+        caption="Payment Type"
+        [allowGrouping]="true">
+        <dxo-lookup
+          [dataSource]="paymentTypes"
+          valueExpr="value"
+          displayExpr="text">
+        </dxo-lookup>
+      </dxi-column>
+      <dxi-column
+        dataField="whoPaid"
+        caption="Who Paid"
+        [allowGrouping]="true">
+        <dxo-lookup
+          [dataSource]="users"
+          valueExpr="value"
+          displayExpr="text">
+        </dxo-lookup>
+      </dxi-column>
+      <dxi-column
+        dataField="vendor"
+        caption="Vendor"
+        [allowGrouping]="true">
+      </dxi-column>
+      <dxi-column
+        dataField="recurring"
+        caption="Recurring"
+        dataType="boolean"
+        [allowGrouping]="true">
+      </dxi-column>
+      <dxo-paging [pageSize]="10"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]"></dxo-pager>
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
+
+      <dxo-group-panel [visible]="true" [allowColumnDragging]="true"></dxo-group-panel>
+      <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+
+      <dxo-summary>
+        <dxi-total-item
+          column="amount"
+          summaryType="sum"
+          [valueFormat]="{ type: 'currency', currency: 'RON' }">
+        </dxi-total-item>
+        <dxi-total-item
+          column="description"
+          summaryType="count">
+        </dxi-total-item>
+        <dxi-group-item
+          column="amount"
+          summaryType="sum"
+          [valueFormat]="{ type: 'currency', currency: 'RON' }"
+          [alignByColumn]="true">
+        </dxi-group-item>
+        <dxi-group-item
+          column="description"
+          summaryType="count"
+          [alignByColumn]="true">
+        </dxi-group-item>
+      </dxo-summary>
+
+      <dxo-toolbar>
+          <dxi-item widget="dxButton" location="before" [options]="{icon:'refresh', onClick: loadExpenses}"></dxi-item>
+          <dxi-item name="groupPanel" location="before"></dxi-item>
+        <dxi-item widget="dxButton" location="after" [options]="{text: 'Edit', icon: 'edit', onClick: editSelected}"></dxi-item>
+        <dxi-item widget="dxButton" location="after" [options]="{text: 'Delete', icon: 'trash', type: 'danger', onClick: deleteSelected}"></dxi-item>
+      </dxo-toolbar>
+    </dx-data-grid>
+
+    <dx-popup
+      [visible]="popupVisible()"
+      [title]="isEditing() ? 'Edit Expense' : 'Add Expense'"
+      [width]="600"
+      [height]="500"
+      (onHiding)="hidePopup()">
+      <dx-form
+        [formData]="currentExpense()"
+        [colCount]="1"
+        [showColonAfterLabel]="true">
+        <dxi-item
+          dataField="date"
+          [label]="{ text: 'Date' }"
+          editorType="dxDateBox"
+          [editorOptions]="{ displayFormat: 'shortDate' }">
+        </dxi-item>
+        <dxi-item
+          dataField="type"
+          [label]="{ text: 'Type' }"
+          editorType="dxSelectBox"
+          [editorOptions]="{ dataSource: expenseTypes, valueExpr: 'value', displayExpr: 'text' }">
+        </dxi-item>
+        <dxi-item
+          dataField="description"
+          [label]="{ text: 'Description' }"
+          [editorOptions]="{ placeholder: 'Enter expense description' }">
+        </dxi-item>
+        <dxi-item
+          dataField="amount"
+          [label]="{ text: 'Amount' }"
+          editorType="dxNumberBox"
+          [editorOptions]="{ format: { type: 'currency', currency: 'RON' }, min: 0 }">
+        </dxi-item>
+        <dxi-item
+          dataField="paymentType"
+          [label]="{ text: 'Payment Type' }"
+          editorType="dxSelectBox"
+          [editorOptions]="{ dataSource: paymentTypes, valueExpr: 'value', displayExpr: 'text' }">
+        </dxi-item>
+        <dxi-item
+          dataField="whoPaid"
+          [label]="{ text: 'Who Paid' }"
+          editorType="dxSelectBox"
+          [editorOptions]="{ dataSource: users, valueExpr: 'value', displayExpr: 'text' }">
+        </dxi-item>
+        <dxi-item
+          dataField="vendor"
+          [label]="{ text: 'Vendor/Store (optional)' }"
+          [editorOptions]="{ placeholder: 'Enter vendor or store name' }">
+        </dxi-item>
+        <dxi-item
+          dataField="recurring"
+          [label]="{ text: 'Recurring' }"
+          editorType="dxCheckBox">
+        </dxi-item>
+        <dxi-item
+          dataField="notes"
+          [label]="{ text: 'Notes (optional)' }"
+          editorType="dxTextArea"
+          [editorOptions]="{ height: 60 }">
+        </dxi-item>
+      </dx-form>
+
+      <dxi-popup-toolbar-item
+        widget="dxButton"
+        location="after"
+        [options]="{
+          text: 'Save',
+          type: 'default',
+          onClick: saveExpense
+        }">
+      </dxi-popup-toolbar-item>
+      <dxi-popup-toolbar-item
+        widget="dxButton"
+        location="after"
+        [options]="{
+          text: 'Cancel',
+          onClick: hidePopup
+        }">
+      </dxi-popup-toolbar-item>
+    </dx-popup>
+  </div>
+</div>
