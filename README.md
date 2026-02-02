@@ -1,6 +1,17 @@
-# AppCode
+# Family Expenses
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.2.
+A desktop application for managing family expenses built with Electron and Angular.
+
+## Installation
+
+### macOS
+Download the latest DMG from [Releases](https://github.com/ratones/family-expenses/releases).
+
+**Important:** On first launch, macOS may show a "damaged" warning. To fix this, open Terminal and run:
+```bash
+xattr -cr "/Applications/Family Expenses.app"
+```
+Then try opening the app again.
 
 ## Development server
 
@@ -57,3 +68,8 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+# Update version in package.json first (optional)
+# Then create and push new tag:
+git tag v1.0.2  # or v1.1.0, v2.0.0, etc.
+git push origin v1.0.2
