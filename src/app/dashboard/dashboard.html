@@ -57,6 +57,27 @@
         <dxo-tooltip [enabled]="true" format="currency"></dxo-tooltip>
       </dx-pie-chart>
     </div>
+
+    <div class="chart-container">
+      <h2>Expenses by User</h2>
+      <dx-chart
+        [dataSource]="summary().expensesByUser"
+        [palette]="['#48C9B0', '#F39C12', '#3498DB', '#E74C3C', '#9B59B6']">
+        <dxi-series
+          argumentField="user"
+          valueField="amount"
+          type="bar">
+        </dxi-series>
+        <dxo-legend [visible]="false"></dxo-legend>
+        <dxo-tooltip [enabled]="true" format="currency"></dxo-tooltip>
+        <dxo-argument-axis>
+          <dxo-label [visible]="true"></dxo-label>
+        </dxo-argument-axis>
+        <dxo-value-axis>
+          <dxo-label format="currency"></dxo-label>
+        </dxo-value-axis>
+      </dx-chart>
+    </div>
   </div>
 
   <!-- Recent Expenses -->

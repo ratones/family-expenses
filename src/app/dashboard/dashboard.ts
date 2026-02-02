@@ -11,6 +11,7 @@ interface ExpenseSummary {
   averageAmount: number;
   expensesByType: { type: string; amount: number; count: number }[];
   expensesByPaymentType: { paymentType: string; amount: number; count: number }[];
+  expensesByUser: { user: string; amount: number; count: number }[];
   recentExpenses: Expense[];
 }
 
@@ -29,6 +30,7 @@ export class Dashboard implements OnInit {
     averageAmount: 0,
     expensesByType: [],
     expensesByPaymentType: [],
+    expensesByUser: [],
     recentExpenses: []
   });
 
@@ -84,6 +86,22 @@ export class Dashboard implements OnInit {
       count: data.count
     }));
 
+    // Group by user
+    const userMap = new Map<string, { amount: number; count: number }>();
+    expenses.forEach(exp => {
+      const current = userMap.get(exp.whoPaid) || { amount: 0, count: 0 };
+      userMap.set(exp.whoPaid, {
+        amount: current.amount + exp.amount,
+        count: current.count + 1
+      });
+    });
+
+    const expensesByUser = Array.from(userMap.entries()).map(([user, data]) => ({
+      user,
+      amount: data.amount,
+      count: data.count
+    }));
+
     // Get recent expenses (last 5)
     const recentExpenses = expenses
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
@@ -95,6 +113,7 @@ export class Dashboard implements OnInit {
       averageAmount,
       expensesByType,
       expensesByPaymentType,
+      expensesByUser,
       recentExpenses
     });
   }
