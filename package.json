@@ -71,6 +71,7 @@
       "dist/family-expenses/browser/**/*",
       "main.js",
       "preload.js",
+      "database-main.js",
       "package.json"
     ],
     "publish": {
