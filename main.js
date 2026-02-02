@@ -131,8 +131,13 @@ app.whenReady().then(() => {
   createWindow();
   
   // Check for updates (only in production)
-  if (process.env.NODE_ENV !== 'development') {
-    autoUpdater.checkForUpdatesAndNotify();
+  if (app.isPackaged) {
+    console.log('Checking for updates - app is packaged');
+    setTimeout(() => {
+      autoUpdater.checkForUpdatesAndNotify();
+    }, 3000); // Wait 3 seconds after app starts
+  } else {
+    console.log('Skipping update check - running in development');
   }
 });
 
