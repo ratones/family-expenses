@@ -1,6 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DxChartModule, DxPieChartModule } from 'devextreme-angular';
-import { DxiPieChartSeriesModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { CommonModule } from '@angular/common';
 import { DatabaseService } from '../services/database.service';
 import { Expense } from '../models/database.models';
@@ -17,7 +16,11 @@ interface ExpenseSummary {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [DxChartModule, DxPieChartModule, DxiPieChartSeriesModule, CommonModule],
+  imports: [
+    DxChartModule, 
+    DxPieChartModule, 
+    CommonModule
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
