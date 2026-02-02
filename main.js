@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const DatabaseService = require('./database-main');
@@ -18,7 +18,15 @@ autoUpdater.on('checking-for-update', () => {
 
 autoUpdater.on('update-available', (info) => {
   console.log('Update available:', info.version);
-  // You could show a notification to the user here
+  if (mainWindow) {
+    dialog.showMessageBox(mainWindow, {
+      type: 'info',
+      title: 'Update Available',
+      message: `A new version ${info.version} is available!`,
+      detail: 'The update will be downloaded in the background. You will be notified when it is ready to install.',
+      buttons: ['OK']
+    });
+  }
 });
 
 autoUpdater.on('update-not-available', (info) => {
@@ -27,6 +35,15 @@ autoUpdater.on('update-not-available', (info) => {
 
 autoUpdater.on('error', (err) => {
   console.error('Error in auto-updater:', err);
+  if (mainWindow) {
+    dialog.showMessageBox(mainWindow, {
+      type: 'error',
+      title: 'Update Error',
+      message: 'Failed to check for updates',
+      detail: err.message,
+      buttons: ['OK']
+    });
+  }
 });
 
 autoUpdater.on('download-progress', (progressObj) => {
@@ -34,12 +51,29 @@ autoUpdater.on('download-progress', (progressObj) => {
   log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
   log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
   console.log(log_message);
+  // Update window title with progress
+  if (mainWindow) {
+    mainWindow.setTitle(`Family Expenses - Downloading update ${Math.round(progressObj.percent)}%`);
+  }
 });
 
 autoUpdater.on('update-downloaded', (info) => {
   console.log('Update downloaded:', info.version);
-  // Auto-install on quit is enabled, but you could show a dialog here
-  autoUpdater.quitAndInstall();
+  // Reset window title
+  if (mainWindow) {
+    mainWindow.setTitle('Family Expenses');
+    dialog.showMessageBox(mainWindow, {
+      type: 'info',
+      title: 'Update Ready',
+      message: `Version ${info.version} has been downloaded`,
+      detail: 'The update will be installed when you close the application.',
+      buttons: ['Restart Now', 'Later']
+    }).then((result) => {
+      if (result.response === 0) {
+        autoUpdater.quitAndInstall();
+      }
+    });
+  }
 });
 
 function createWindow() {
