@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, protocol } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const DatabaseService = require('./database-main');
@@ -42,20 +42,6 @@ autoUpdater.on('update-downloaded', (info) => {
   autoUpdater.quitAndInstall();
 });
 
-// Register custom protocol for packaged app
-if (!app.isPackaged) {
-  // In development, use the default file protocol
-} else {
-  // In production, register a custom protocol to serve files from ASAR
-  app.whenReady().then(() => {
-    protocol.registerFileProtocol('app', (request, callback) => {
-      const url = request.url.substr(6); // Remove 'app://' prefix
-      const filePath = path.join(process.resourcesPath, 'dist/family-expenses/browser', url);
-      callback({ path: filePath });
-    });
-  });
-}
-
 function createWindow() {
   // Create the browser window
   mainWindow = new BrowserWindow({
@@ -90,8 +76,9 @@ function createWindow() {
     // Open DevTools in development
     mainWindow.webContents.openDevTools();
   } else {
-    // In production, use custom protocol to load files from ASAR
-    mainWindow.loadURL('app://index.html');
+    // In production, load the built files
+    const indexPath = path.join(__dirname, 'dist/family-expenses/browser/index.html');
+    mainWindow.loadFile(indexPath);
   }
 
   // Show window when ready to prevent visual flash
