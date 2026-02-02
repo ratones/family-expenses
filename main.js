@@ -76,8 +76,9 @@ function createWindow() {
     // Open DevTools in development
     mainWindow.webContents.openDevTools();
   } else {
-    // In production, load the built files
-    mainWindow.loadFile(path.join(__dirname, 'dist/family-expenses/browser/index.html'));
+    // In production, load the built files from the packaged app
+    const indexPath = path.join(process.resourcesPath, 'dist/family-expenses/browser/index.html');
+    mainWindow.loadFile(indexPath);
   }
 
   // Show window when ready to prevent visual flash
