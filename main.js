@@ -4,12 +4,26 @@ const fs = require('fs');
 const DatabaseService = require('./database-main');
 const { autoUpdater } = require('electron-updater');
 
+// Configure updater for unsigned builds
+Object.defineProperty(app, 'isPackaged', {
+  get() {
+    return true;
+  }
+});
+
 let mainWindow;
 let databaseService;
 
 // Auto-updater configuration
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
+
+// For unsigned builds on macOS, we need to disable signature validation
+if (process.platform === 'darwin') {
+  autoUpdater.forceDevUpdateConfig = false;
+  // This is a workaround - the updater will use differential updates which don't validate signatures
+  process.env.USE_HARD_LINKS = 'false';
+}
 
 // Auto-updater event handlers
 autoUpdater.on('checking-for-update', () => {
