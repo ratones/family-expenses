@@ -1,6 +1,6 @@
 {
   "name": "family-expenses",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -96,7 +96,8 @@
         }
       ],
       "icon": "build/icon.icns",
-      "artifactName": "Family-Expenses-${version}-${arch}.${ext}"
+      "artifactName": "Family-Expenses-${version}-${arch}.${ext}",
+      "identity": null
     },
     "win": {
       "target": "nsis",
