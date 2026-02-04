@@ -1,28 +1,23 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const DatabaseService = require('./database-main');
 const { autoUpdater } = require('electron-updater');
 
-// Configure updater for unsigned builds
-Object.defineProperty(app, 'isPackaged', {
-  get() {
-    return true;
-  }
-});
-
 let mainWindow;
 let databaseService;
 
-// Auto-updater configuration
-autoUpdater.autoDownload = true;
-autoUpdater.autoInstallOnAppQuit = true;
+// For unsigned macOS builds, auto-updates don't work due to signature validation
+// Check for updates manually and provide download link instead
+const isUnsignedMacBuild = process.platform === 'darwin';
 
-// For unsigned builds on macOS, we need to disable signature validation
-if (process.platform === 'darwin') {
-  autoUpdater.forceDevUpdateConfig = false;
-  // This is a workaround - the updater will use differential updates which don't validate signatures
-  process.env.USE_HARD_LINKS = 'false';
+// Auto-updater configuration
+if (!isUnsignedMacBuild) {
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+} else {
+  autoUpdater.autoDownload = false;
+  autoUpdater.autoInstallOnAppQuit = false;
 }
 
 // Auto-updater event handlers
@@ -33,13 +28,30 @@ autoUpdater.on('checking-for-update', () => {
 autoUpdater.on('update-available', (info) => {
   console.log('Update available:', info.version);
   if (mainWindow) {
-    dialog.showMessageBox(mainWindow, {
-      type: 'info',
-      title: 'Update Available',
-      message: `A new version ${info.version} is available!`,
-      detail: 'The update will be downloaded in the background. You will be notified when it is ready to install.',
-      buttons: ['OK']
-    });
+    if (isUnsignedMacBuild) {
+      // For unsigned builds, provide manual download link
+      const result = dialog.showMessageBoxSync(mainWindow, {
+        type: 'info',
+        title: 'Update Available',
+        message: `A new version ${info.version} is available!`,
+        detail: 'This app is unsigned, so automatic updates are not supported. Would you like to download the new version manually?',
+        buttons: ['Download', 'Later'],
+        defaultId: 0,
+        cancelId: 1
+      });
+      
+      if (result === 0) {
+        shell.openExternal('https://github.com/ratones/family-expenses/releases/latest');
+      }
+    } else {
+      dialog.showMessageBox(mainWindow, {
+        type: 'info',
+        title: 'Update Available',
+        message: `A new version ${info.version} is available!`,
+        detail: 'The update will be downloaded in the background. You will be notified when it is ready to install.',
+        buttons: ['OK']
+      });
+    }
   }
 });
 
@@ -49,7 +61,8 @@ autoUpdater.on('update-not-available', (info) => {
 
 autoUpdater.on('error', (err) => {
   console.error('Error in auto-updater:', err);
-  if (mainWindow) {
+  // Only show error dialog for non-signature validation errors
+  if (!err.message.includes('code signature') && !err.message.includes('did not pass validation') && mainWindow) {
     dialog.showMessageBox(mainWindow, {
       type: 'error',
       title: 'Update Error',
@@ -61,32 +74,36 @@ autoUpdater.on('error', (err) => {
 });
 
 autoUpdater.on('download-progress', (progressObj) => {
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-  console.log(log_message);
-  // Update window title with progress
-  if (mainWindow) {
-    mainWindow.setTitle(`Family Expenses - Downloading update ${Math.round(progressObj.percent)}%`);
+  if (!isUnsignedMacBuild) {
+    let log_message = "Download speed: " + progressObj.bytesPerSecond;
+    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    console.log(log_message);
+    // Update window title with progress
+    if (mainWindow) {
+      mainWindow.setTitle(`Family Expenses - Downloading update ${Math.round(progressObj.percent)}%`);
+    }
   }
 });
 
 autoUpdater.on('update-downloaded', (info) => {
-  console.log('Update downloaded:', info.version);
-  // Reset window title
-  if (mainWindow) {
-    mainWindow.setTitle('Family Expenses');
-    dialog.showMessageBox(mainWindow, {
-      type: 'info',
-      title: 'Update Ready',
-      message: `Version ${info.version} has been downloaded`,
-      detail: 'The update will be installed when you close the application.',
-      buttons: ['Restart Now', 'Later']
-    }).then((result) => {
-      if (result.response === 0) {
-        autoUpdater.quitAndInstall();
-      }
-    });
+  if (!isUnsignedMacBuild) {
+    console.log('Update downloaded:', info.version);
+    // Reset window title
+    if (mainWindow) {
+      mainWindow.setTitle('Family Expenses');
+      dialog.showMessageBox(mainWindow, {
+        type: 'info',
+        title: 'Update Ready',
+        message: `Version ${info.version} has been downloaded`,
+        detail: 'The update will be installed when you close the application.',
+        buttons: ['Restart Now', 'Later']
+      }).then((result) => {
+        if (result.response === 0) {
+          autoUpdater.quitAndInstall();
+        }
+      });
+    }
   }
 });
 
